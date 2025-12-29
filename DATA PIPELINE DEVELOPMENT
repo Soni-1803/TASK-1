@@ -1,0 +1,115 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "d1CAajnd_YwH",
+        "outputId": "0b7f2e85-5cca-4628-9e4e-7677f05a8109"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Original Data:\n",
+            "     Name   Age  Gender  Marks\n",
+            "0    Asha  20.0  Female   85.0\n",
+            "1    Bala  21.0    Male   78.0\n",
+            "2  Charan   NaN    Male   90.0\n",
+            "3   Divya  22.0  Female    NaN\n",
+            "4   Ezhil  20.0    Male   88.0\n",
+            "\n",
+            "Processed Data:\n",
+            "     Name     Age  Gender     Marks\n",
+            "0    Asha -1.0113       0 -0.061453\n",
+            "1    Bala  0.3371       1 -1.782128\n",
+            "2  Charan  0.0000       1  1.167601\n",
+            "3   Divya  1.6855       0  0.000000\n",
+            "4   Ezhil -1.0113       1  0.675980\n",
+            "\n",
+            "Data Pipeline Completed Successfully!\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/tmp/ipython-input-4074855118.py:21: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.\n",
+            "The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.\n",
+            "\n",
+            "For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.\n",
+            "\n",
+            "\n",
+            "  df['Age'].fillna(df['Age'].mean(), inplace=True)\n",
+            "/tmp/ipython-input-4074855118.py:22: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.\n",
+            "The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.\n",
+            "\n",
+            "For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.\n",
+            "\n",
+            "\n",
+            "  df['Marks'].fillna(df['Marks'].mean(), inplace=True)\n"
+          ]
+        }
+      ],
+      "source": [
+        "\n",
+        "# TASK 1: DATA PIPELINE DEVELOPMENT\n",
+        "# ETL Process using Pandas and Scikit-learn\n",
+        "\n",
+        "# Step 1: Import libraries\n",
+        "import pandas as pd\n",
+        "from sklearn.preprocessing import StandardScaler, LabelEncoder\n",
+        "\n",
+        "# Step 2: Extract Data (Create sample dataset)\n",
+        "data = {\n",
+        "    'Name': ['Asha', 'Bala', 'Charan', 'Divya', 'Ezhil'],\n",
+        "    'Age': [20, 21, None, 22, 20],\n",
+        "    'Gender': ['Female', 'Male', 'Male', 'Female', 'Male'],\n",
+        "    'Marks': [85, 78, 90, None, 88]\n",
+        "}\n",
+        "\n",
+        "df = pd.DataFrame(data)\n",
+        "print(\"Original Data:\")\n",
+        "print(df)\n",
+        "\n",
+        "# Step 3: Handle missing values\n",
+        "df['Age'].fillna(df['Age'].mean(), inplace=True)\n",
+        "df['Marks'].fillna(df['Marks'].mean(), inplace=True)\n",
+        "\n",
+        "# Step 4: Encode categorical data\n",
+        "le = LabelEncoder()\n",
+        "df['Gender'] = le.fit_transform(df['Gender'])\n",
+        "\n",
+        "# Step 5: Scale numerical columns\n",
+        "scaler = StandardScaler()\n",
+        "df[['Age', 'Marks']] = scaler.fit_transform(df[['Age', 'Marks']])\n",
+        "\n",
+        "# Step 6: Load transformed data (Save to CSV)\n",
+        "df.to_csv(\"processed_data.csv\", index=False)\n",
+        "\n",
+        "# Step 7: Output\n",
+        "print(\"\\nProcessed Data:\")\n",
+        "print(df)\n",
+        "print(\"\\nData Pipeline Completed Successfully!\")"
+      ]
+    }
+  ]
+}
